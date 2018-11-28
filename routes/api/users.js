@@ -102,4 +102,13 @@ router.post('/login', (req, res) => {
   });
 });
 
+// @route   DELETE /users
+// @desc    Delete user
+// @access  private
+router.delete('/', passport.authenticate('jwt', { session: false}), (req, res) => {
+  User.findOneAndRemove({ _id: req.user.id })
+    .then(() => res.json({ success: true }));
+});
+
+
 module.exports = router;
