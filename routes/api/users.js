@@ -10,6 +10,7 @@ const User = require('../../models/User');
 
 // Load validation
 const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
 // @route   POST /users/register
 // @desc    Register a user
@@ -48,6 +49,57 @@ router.post('/register', (req, res) => {
         });
       }
     });
+});
+
+// @route   POST /users/login
+// @desc    Login User / returning JWT token
+// @access  Public
+router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // check validation
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
+
+  const { email, password } = req.body;
+
+  // Find user by email
+  User.findOne({ email })
+    .then(user => {
+      // Check if user actually exists
+      if(!user){
+        errors.email = 'User not found.';
+        return res.status(404).json(errors);
+      }
+
+      // Check password
+      bcrypt.compare(password, user.password)
+        .then(isMatch => {
+          if(isMatch){
+            // User matched, create JWT payload
+            const payload = {
+              id: user.id,
+              name: user.name,
+            };
+
+            // Sign the token, set to expire in 12 hours
+            jwt.sign(
+              payload,
+              keys.secretOrKey,
+              { expiresIn: 43200 },
+              (err, token) => {
+                res.json({
+                  success: true,
+                  token: 'Bearer ' + token
+                });
+              });
+          } else {
+            errors.password = 'Password incorrect';
+            return res.status(400).json(errors);
+          }
+      });
+  });
 });
 
 module.exports = router;
