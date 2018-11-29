@@ -5,9 +5,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const axios = require('axios');
+const cron = require('node-cron');
 
 // Require routes
 const users = require('./routes/api/users');
+const humidity = require('./routes/api/humidity');
 
 const app = express();
 
@@ -32,6 +35,17 @@ mongoose
 
 // Use routes
 app.use('/users', users);
+app.use('/api/humidity', humidity);
+
+// Define global variables
+global.globalHumidity = 85;
+
+// Set global variables based on db variables on startup
+axios.get('http://127.0.0.1:5000/api/humidity/setpoint')
+  .then(res => {
+    global.globalHumidity = (res.data[0].targetvalue);
+  })
+  .catch(err => console.log('Error getting startup global humidity: ' + err));
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
