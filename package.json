@@ -30,6 +30,8 @@
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.14",
     "node-cron": "^2.0.3",
+    "node-dht-sensor": "0.0.34",
+    "numeral": "^2.0.6",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "validator": "^10.9.0"
