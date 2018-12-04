@@ -11,6 +11,7 @@ const cron = require('node-cron');
 // Require routes
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
+const dht22 = require('./routes/api/dht22');
 
 const app = express();
 
@@ -36,9 +37,11 @@ mongoose
 // Use routes
 app.use('/users', users);
 app.use('/api/humidity', humidity);
+app.use('/api/dht22', dht22);
 
 // Define global variables
 global.globalHumidity = 85;
+global.saveCount = 0;
 
 // Set global variables based on db variables on startup
 axios.get('http://127.0.0.1:5000/api/humidity/setpoint')
@@ -47,5 +50,24 @@ axios.get('http://127.0.0.1:5000/api/humidity/setpoint')
   })
   .catch(err => console.log('Error getting startup global humidity: ' + err));
 
+// Start server listening
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
+
+// Scheduled check for humidity
+cron.schedule('*/10 * * * * *', () => {
+  axios.post('http://127.0.0.1:5000/api/dht22')
+    .then((res) => {
+      if(process.env.DEBUG === 'TRUE'){
+        let humidityRead = res.data.humidityvalue;
+        let temperatureRead = res.data.temperaturevalue;
+        console.log(`humidity: ${humidityRead} || temperature: ${temperatureRead}`);
+      }
+
+      if(global.saveCount !== 6){
+        global.saveCount++;
+      } else {
+        global.saveCount = 0;
+      }
+    });
+});

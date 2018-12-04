@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-// Load humidity model
+// Load humidity target model
 const HumidityTarget = require('../../models/HumidityTarget');
 
 // @route   POST /api/humidity/setpoint
