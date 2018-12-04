@@ -8,6 +8,10 @@ const passport = require('passport');
 const axios = require('axios');
 const cron = require('node-cron');
 
+// GPIO setup for debugging LED
+const Gpio = require('onoff').Gpio;
+const debugLed = new Gpio(26, 'out');
+
 // Require routes
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
@@ -62,6 +66,8 @@ cron.schedule('*/10 * * * * *', () => {
         let humidityRead = res.data.humidityvalue;
         let temperatureRead = res.data.temperaturevalue;
         console.log(`humidity: ${humidityRead} || temperature: ${temperatureRead}`);
+
+        (humidityRead <= global.globalHumidity) ? debugLed.writeSync(1) : debugLed.writeSync(0);
       }
 
       if(global.saveCount !== 6){
