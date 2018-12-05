@@ -9,12 +9,12 @@ const HumidityTarget = require('../../models/HumidityTarget');
 // @route   POST /api/humidity/setpoint
 // @desc    Change the humidity setpoint
 // @access  Private
-router.post('/setpoint', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
   const newHumidity = new HumidityTarget({
-    targetvalue: req.body.targetvalue
+    targetvalue: req.params.targetvalue
   });
 
-  global.globalHumidity = req.body.targetvalue;
+  global.globalHumidity = req.params.targetvalue;
 
   newHumidity
     .save()

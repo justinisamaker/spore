@@ -9,6 +9,7 @@ import store from './store';
 
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
+import Dht22 from './components/sensors/DHT22';
 
 import './App.css';
 
@@ -41,6 +42,7 @@ class App extends Component {
             <h1>Spore</h1>
             <Navbar />
             <Route exact path="/login" component={ Login } />
+            <Dht22 />
           </div>
         </BrowserRouter>
       </Provider>

@@ -48,19 +48,19 @@ global.globalHumidity = 85;
 global.saveCount = 0;
 
 // Set global variables based on db variables on startup
-axios.get('http://127.0.0.1:5000/api/humidity/setpoint')
+axios.get('http://127.0.0.1:3001/api/humidity/setpoint')
   .then(res => {
     global.globalHumidity = (res.data[0].targetvalue);
   })
   .catch(err => console.log('Error getting startup global humidity: ' + err));
 
 // Start server listening
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // Scheduled check for humidity
 cron.schedule('*/10 * * * * *', () => {
-  axios.post('http://127.0.0.1:5000/api/dht22')
+  axios.post('http://127.0.0.1:3001/api/dht22')
     .then((res) => {
       if(process.env.DEBUG === 'TRUE'){
         let humidityRead = res.data.humidityvalue;
