@@ -36,10 +36,22 @@ router.post('/', (req, res) => {
 // @access  Public
 router.get('/', (req, res) => {
   Dht22Reading.find()
-  .sort({ date: -1 })
-  .limit(1)
-  .then(reading => res.json(reading))
-  .catch(err => res.status(404).json({ nodht22reading: 'There was an error getting the DHT22 reading from the database.'}));
+    .sort({ date: -1 })
+    .limit(1)
+    .then(reading => res.json(reading))
+    .catch(err => res.status(404).json({ nodht22reading: 'There was an error getting the DHT22 reading from the database.'}));
 });
+
+// @route   GET /api/dht22/:howMany
+// @desc    Get the last X readings from the DHT22
+// @access  Public
+router.get('/:howMany', (req, res) => {
+  Dht22Reading.find()
+    .limit(parseInt(req.params.howMany))
+    .sort({ date: -1 })
+    .then(readings => res.json(readings))
+    .catch(err => res.status(404).json({ nodht22reading: 'There was an error getting the DHT22 reading from the database.'}));
+});
+
 
 module.exports = router;

@@ -10,6 +10,7 @@ import store from './store';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import Dht22 from './components/sensors/DHT22';
+import LineChart from './components/datavis/linechart';
 
 import './App.css';
 
@@ -43,6 +44,7 @@ class App extends Component {
             <Navbar />
             <Route exact path="/login" component={ Login } />
             <Dht22 />
+            <LineChart />
           </div>
         </BrowserRouter>
       </Provider>

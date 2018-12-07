@@ -33,7 +33,7 @@ class Dht22 extends Component {
   }
 
   changeSetpoint(direction){
-    if(direction == 'decrement'){
+    if(direction === 'decrement'){
       this.setState({
         humiditysetpoint: this.state.humiditysetpoint - 1
       });
