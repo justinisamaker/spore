@@ -6,12 +6,12 @@ class Dht22 extends Component {
   constructor(props){
     super(props);
 
-    this.setpointAdd = this.setpointAdd.bind(this);
+    this.changeSetpoint = this.changeSetpoint.bind(this);
 
     this.state = {
-      temperaturevalue: null,
-      humidityvalue: null,
-      humiditysetpoint: null,
+      temperaturevalue: 0,
+      humidityvalue: 0,
+      humiditysetpoint: 0,
     }
   }
 
@@ -32,13 +32,19 @@ class Dht22 extends Component {
       });
   }
 
-  setpointAdd(e){
-    this.setState({
-      humiditysetpoint: this.state.humiditysetpoint += 1
-    });
-
-    console.log(this.state.humiditysetpoint);
-    axios.post(`/api/humidity/setpoint/${this.state.humiditysetpoint}`);
+  changeSetpoint(direction){
+    if(direction == 'decrement'){
+      this.setState({
+        humiditysetpoint: this.state.humiditysetpoint - 1
+      });
+      axios.post(`/api/humidity/setpoint/${this.state.humiditysetpoint}`);
+    } else {
+      this.setState({
+        humiditysetpoint: this.state.humiditysetpoint + 1
+      });
+      axios.post(`/api/humidity/setpoint/${this.state.humiditysetpoint}`);
+      console.log('increment');
+    }
   }
 
   render(){
@@ -50,8 +56,8 @@ class Dht22 extends Component {
 
         <div className="setpoint-control">
           <h5>Setpoint: { this.state.humiditysetpoint }</h5>
-          <button className="setpoint-add" onClick={this.setpointAdd}>+</button>
-          <button className="setpoint-subtract">-</button>
+          <button className="setpoint-add" onClick={() => this.changeSetpoint('increment')}>+</button>
+          <button className="setpoint-subtract" onClick={() => this.changeSetpoint('decrement')}>-</button>
         </div>
       </div>
     )
