@@ -10,6 +10,8 @@ class LineChart extends Component{
     this.state = {
       chartreadings: []
     }
+
+    this.changeRange = this.changeRange.bind(this);
   }
 
   componentDidMount(){
@@ -21,14 +23,23 @@ class LineChart extends Component{
       });
   }
 
+  changeRange(range){
+    axios.get(`/api/dht22/${range}`)
+      .then(res => {
+        this.setState({
+          chartreadings: res.data
+        });
+      });
+  }
+
   render(){
     const dateFormat = (readTime) => {
-      var thisTime = Moment(readTime).format('h:mm A');
+      var thisTime = Moment(readTime).format('M/D h:mm A');
       return thisTime;
     };
 
     const graphStyle = {
-      width: '90%',
+      width: '100%',
       height: '300px',
       margin: '1em auto'
     }
@@ -44,6 +55,11 @@ class LineChart extends Component{
             <Area type="monotone" dataKey="humidityvalue" stroke="#3D99FE" />
           </AreaChart>
         </ResponsiveContainer>
+        <div className="range-control">
+          <button className="adjust-range" onClick={() => this.changeRange(10)}>10</button>
+          <button className="adjust-range" onClick={() => this.changeRange(100)}>100</button>
+          <button className="adjust-range" onClick={() => this.changeRange(500)}>500</button>
+        </div>
       </div>
     );
   }
