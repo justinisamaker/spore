@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const dht = require('node-dht-sensor');
 const numeral = require('numeral');
+const moment = require('moment');
 
 // Load humidity reading model
 const Dht22Reading = require('../../models/Dht22Reading');
@@ -51,6 +52,25 @@ router.get('/:howMany', (req, res) => {
     .sort({ date: -1 })
     .then(readings => res.json(readings))
     .catch(err => res.status(404).json({ nodht22reading: 'There was an error getting the DHT22 reading from the database.'}));
+});
+
+// @route   GET /api/dht22/last/:unit
+// @desc    Get the DHT22 readings from a unit of time (e.g. last/month)
+// @access  Public
+router.get('/last/:unit', (req, res) => {
+  let start = moment().startOf(req.params.unit);
+  let end = moment().endOf(req.params.unit);
+
+  Dht22Reading
+    .find({
+      date: {
+        '$gte': start,
+        '$lte': end
+      }
+    })
+    .sort({ date: -1 })
+    .then(readings => res.json(readings))
+    .catch(err => res.status(404).json({ nodht22reading: `There was an error getting the DHT22 reading from the database: ${err}`}));
 });
 
 

@@ -11,7 +11,7 @@ class LineChart extends Component{
       chartreadings: []
     }
 
-    this.changeRange = this.changeRange.bind(this);
+    this.changeTimeRange = this.changeTimeRange.bind(this);
   }
 
   componentDidMount(){
@@ -23,8 +23,8 @@ class LineChart extends Component{
       });
   }
 
-  changeRange(range){
-    axios.get(`/api/dht22/${range}`)
+  changeTimeRange(range){
+    axios.get(`/api/dht22/last/${range}`)
       .then(res => {
         this.setState({
           chartreadings: res.data
@@ -56,9 +56,9 @@ class LineChart extends Component{
           </AreaChart>
         </ResponsiveContainer>
         <div className="range-control">
-          <button className="adjust-range" onClick={() => this.changeRange(10)}>10</button>
-          <button className="adjust-range" onClick={() => this.changeRange(100)}>100</button>
-          <button className="adjust-range" onClick={() => this.changeRange(500)}>500</button>
+          <button className="adjust-range" onClick={() => this.changeTimeRange('day')}>Last day</button>
+          <button className="adjust-range" onClick={() => this.changeTimeRange('week')}>Last week</button>
+          <button className="adjust-range" onClick={() => this.changeTimeRange('month')}>Last month</button>
         </div>
       </div>
     );
