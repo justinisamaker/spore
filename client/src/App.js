@@ -12,7 +12,7 @@ import Login from './components/auth/Login';
 import Dht22 from './components/sensors/DHT22';
 import LineChart from './components/datavis/linechart';
 
-import './App.css';
+import './App.scss';
 
 // check for jwtToken
 if(localStorage.jwtToken){
