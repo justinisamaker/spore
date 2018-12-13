@@ -7,10 +7,10 @@ import { clearCurrentProfile } from './actions/profileActions';
 import { Provider } from 'react-redux';
 import store from './store';
 
-import Navbar from './components/layout/Navbar';
+import Header from './components/header/Header';
 import Login from './components/auth/Login';
 import Dht22 from './components/sensors/DHT22';
-import LineChart from './components/datavis/LineChart';
+import LineChart from './components/linechart/LineChart';
 
 import './App.scss';
 
@@ -40,8 +40,7 @@ class App extends Component {
       <Provider store={ store }>
         <BrowserRouter>
           <div className="App">
-            <h1>Spore</h1>
-            <Navbar />
+            <Header />
             <Route exact path="/login" component={ Login } />
             <Dht22 />
             <LineChart />

@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 import { clearCurrentProfile } from '../../actions/profileActions';
-import 'Navbar.scss';
+import './Header.scss';
+import { Button } from '../button/Button';
 
-class Navbar extends Component{
+class Header extends Component{
   onLogoutClick(e){
     e.preventDefault();
     this.props.clearCurrentProfile();
@@ -18,11 +19,9 @@ class Navbar extends Component{
     const authLinks = (
       <ul>
         <li>
-          <Link to="/">Home</Link>
-        </li>
-
-        <li>
-          <Link to="/" onClick={this.onLogoutClick.bind(this)}>Log Out</Link>
+          <Link to='/' onClick={this.onLogoutClick.bind(this)}>
+            <Button text='Log Out' />
+          </Link>
         </li>
       </ul>
     );
@@ -30,24 +29,30 @@ class Navbar extends Component{
     const guestLinks = (
       <ul>
         <li>
-          <Link to="/register">Sign Up</Link>
+          <Link to="/register"><Button text='Register' /></Link>
         </li>
 
         <li>
-          <Link to="/login">Login</Link>
+          <Link to="/login"><Button text='Login' /></Link>
         </li>
       </ul>
     );
 
     return(
-      <nav className="navbar">
-        { isAuthenticated ? authLinks : guestLinks }
-      </nav>
+      <header className="main-header">
+        <Link to="/">
+          <img src="/assets/images/sojourn-fare-logo.svg" alt="Sojourn Fare Logo" className="sojourn-fare-logo"/>
+        </Link>
+
+        <nav className="header-nav">
+          { isAuthenticated ? authLinks : guestLinks }
+        </nav>
+      </header>
     );
   }
 }
 
-Navbar.propTypes = {
+Header.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
@@ -56,4 +61,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(Navbar);
+export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(Header);

@@ -1,0 +1,31 @@
+@import '../../App';
+
+.btn{
+  @include no-appearance();
+  border:1px solid rgba(255,255,255,0);
+  cursor: pointer;
+  justify-content: center;
+  padding: .5em .75em;
+  text-align: center;
+  border-radius:4px;
+  font-size: 1rem;
+  background:none;
+  transition:all 0.1s ease-in-out;
+
+  &:hover{
+    background:$lightBlue;
+    transition:all 0.1s ease-in-out;
+  }
+
+  &.success{
+
+  }
+
+  &.warning{
+
+  }
+
+  &.disabled{
+
+  }
+}

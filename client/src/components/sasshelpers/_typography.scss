@@ -11,5 +11,10 @@
 
 html, body{
   @include lato();
-  color:$darkBlue;
+  color:$darkGray;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
 }
