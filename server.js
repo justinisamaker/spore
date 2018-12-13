@@ -16,6 +16,7 @@ const debugLed = new Gpio(26, 'out');
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
 const dht22 = require('./routes/api/dht22');
+const relay = require('./routes/api/relay');
 
 const app = express();
 
@@ -42,6 +43,7 @@ mongoose
 app.use('/users', users);
 app.use('/api/humidity', humidity);
 app.use('/api/dht22', dht22);
+app.use('/api/outlet', relay);
 
 // Define global variables
 global.globalHumidity = 85;
