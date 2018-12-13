@@ -10,7 +10,7 @@ import store from './store';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import Dht22 from './components/sensors/DHT22';
-import LineChart from './components/datavis/linechart';
+import LineChart from './components/datavis/LineChart';
 
 import './App.scss';
 

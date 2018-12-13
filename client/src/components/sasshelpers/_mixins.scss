@@ -1,0 +1,29 @@
+/* ==============================================
+  MIXINS.SCSS
+  A collection of useful mixins
+============================================== */
+
+// DEBUGGING BORDERS
+$target1: 1px solid red;
+$target2: 1px solid green;
+$target3: 1px solid blue;
+
+// REMOVE ANY CSS APPEARANCE RULES
+@mixin no-appearance(){
+  -webkit-appearance:none !important;
+  -moz-appearance:none !important;
+  appearance:none !important;
+  text-shadow:none !important;
+  outline:none !important;
+  -webkit-box-shadow:none !important;
+  -moz-box-shadow:none !important;
+  box-shadow:none !important;
+  border-radius:0;
+}
+
+// VERTICAL ALIGN
+@mixin vertical-align(){
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 import { clearCurrentProfile } from '../../actions/profileActions';
+import 'Navbar.scss';
 
 class Navbar extends Component{
   onLogoutClick(e){
@@ -39,7 +40,7 @@ class Navbar extends Component{
     );
 
     return(
-      <nav>
+      <nav className="navbar">
         { isAuthenticated ? authLinks : guestLinks }
       </nav>
     );
