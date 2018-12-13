@@ -15,6 +15,8 @@ const debugLed = new Gpio(26, 'out');
 // Require routes
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
+const temperature = require('./routes/api/temperature');
+const co2 = require('./routes/api/co2');
 const dht22 = require('./routes/api/dht22');
 const relay = require('./routes/api/relay');
 
@@ -42,11 +44,15 @@ mongoose
 // Use routes
 app.use('/users', users);
 app.use('/api/humidity', humidity);
+app.use('/api/temperature', temperature);
+app.use('/api/co2', co2);
 app.use('/api/dht22', dht22);
-app.use('/api/outlet', relay);
+app.use('/api/outlet', relay); 
 
 // Define global variables
-global.globalHumidity = 85;
+global.globalHumidity = null;
+global.globalTemperature = null;
+global.globalCo2 = null;
 global.saveCount = 0;
 
 // Set global variables based on db variables on startup
@@ -55,6 +61,18 @@ axios.get('http://127.0.0.1:3001/api/humidity/setpoint')
     global.globalHumidity = (res.data[0].targetvalue);
   })
   .catch(err => console.log('Error getting startup global humidity: ' + err));
+
+axios.get('http://127.0.0.1:3001/api/temperature/setpoint')
+  .then(res => {
+    global.globalTemperature = (res.data[0].targetvalue);
+  })
+  .catch(err => console.log('Error getting startup global temperature: ' + err));
+
+axios.get('http://127.0.0.1:3001/api/co2/setpoint')
+  .then(res => {
+    global.globalCo2 = (res.data[0].targetvalue);
+  })
+  .catch(err => console.log('Error getting startup global Co2: ' + err));
 
 // Start server listening
 const port = process.env.PORT || 3001;

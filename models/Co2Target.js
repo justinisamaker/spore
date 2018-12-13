@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const HumidityReadingSchema = new Schema({
-  humidityvalue: {
+const Co2TargetSchema = new Schema({
+  targetvalue: {
     type: Number,
     required: true
   },
@@ -12,4 +12,4 @@ const HumidityReadingSchema = new Schema({
   }
 });
 
-module.exports = HumidityReading = mongoose.model('humidityreading', HumidityReadingSchema);
+module.exports = Co2Target = mongoose.model('co2target', Co2TargetSchema);
