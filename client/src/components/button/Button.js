@@ -7,12 +7,13 @@ export const Button = ({
   onClick,
   type,
   disabled,
-  buttonType
+  style,
+  size
 }) => (
   <button
     type={type}
     disabled={disabled}
     onClick={onClick}
-    className={classNames('btn', buttonType)}
+    className={classNames('btn', style, size)}
   >{text}</button>
 );
