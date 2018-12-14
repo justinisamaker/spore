@@ -9,7 +9,7 @@ import store from './store';
 
 import Header from './components/header/Header';
 import Login from './components/auth/Login';
-import Dht22 from './components/sensors/DHT22';
+import CurrentReadingsContainer from './components/currentreadings/CurrentReadingsContainer';
 import LineChart from './components/linechart/LineChart';
 
 import './App.scss';
@@ -42,7 +42,7 @@ class App extends Component {
           <div className="App">
             <Header />
             <Route exact path="/login" component={ Login } />
-            <Dht22 />
+            <CurrentReadingsContainer />
             <LineChart />
           </div>
         </BrowserRouter>
