@@ -11,10 +11,10 @@ const Co2Target = require('../../models/Co2Target');
 // @access  Private
 router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
   const newCo2 = new Co2Target({
-    targetvalue: req.params.targetvalue
+    targetvalue: parseInt(req.params.targetvalue)
   });
 
-  global.globalCo2 = req.params.targetvalue;
+  global.globalCo2 = parseInt(req.params.targetvalue);
 
   newCo2
     .save()
