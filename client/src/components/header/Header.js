@@ -20,7 +20,7 @@ class Header extends Component{
       <ul>
         <li>
           <Link to='/' onClick={this.onLogoutClick.bind(this)}>
-            <Button text='Log Out' />
+            <Button text='Log Out' style='light'/>
           </Link>
         </li>
       </ul>
@@ -29,11 +29,11 @@ class Header extends Component{
     const guestLinks = (
       <ul>
         <li>
-          <Link to="/register"><Button text='Register' /></Link>
+          <Link to="/register"><Button text='Register' style='light'/></Link>
         </li>
 
         <li>
-          <Link to="/login"><Button text='Login' /></Link>
+          <Link to="/login"><Button text='Login' style='light'/></Link>
         </li>
       </ul>
     );
