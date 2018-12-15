@@ -1,0 +1,38 @@
+@import '../../App';
+
+.line-chart-container{
+  padding:0 2em;
+  display:grid;
+  grid-template-columns:15% 81.5%;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+    "last-day chart"
+    "last-week chart"
+    "last-month chart";
+}
+
+.line-chart{
+  grid-area:chart;
+  margin-left:2em;
+  border:1px solid $medGray;
+}
+
+.last-day{
+  grid-area:last-day;
+}
+
+.last-week{
+  grid-area:last-week;
+}
+
+.last-month{
+  grid-area:last-month;
+}
+
+.range-control{
+
+  .btn{
+    height:100%;
+    width:100%;
+  }
+}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Moment from 'moment';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import axios from 'axios';
+import { Button } from '../button/Button';
+import './LineChart.scss';
 
 class LineChart extends Component{
   constructor(props){
@@ -38,17 +40,11 @@ class LineChart extends Component{
       return thisTime;
     };
 
-    const graphStyle = {
-      width: '100%',
-      height: '300px',
-      margin: '1em auto'
-    }
-
     return(
-      <div style={graphStyle}>
-        <ResponsiveContainer>
+      <div className="line-chart-container">
+        <ResponsiveContainer className="line-chart">
           <AreaChart data={this.state.chartreadings}>
-            <XAxis dataKey="date" reversed={true} tickFormatter={dateFormat}/>
+            <XAxis dataKey="date" reversed={true} tickFormatter={dateFormat} interval={50}/>
             <YAxis type="number" dataKey="humidityvalue"/>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
             <Tooltip />
@@ -56,9 +52,9 @@ class LineChart extends Component{
           </AreaChart>
         </ResponsiveContainer>
         <div className="range-control">
-          <button className="adjust-range" onClick={() => this.changeTimeRange('day')}>Last day</button>
-          <button className="adjust-range" onClick={() => this.changeTimeRange('week')}>Last week</button>
-          <button className="adjust-range" onClick={() => this.changeTimeRange('month')}>Last month</button>
+          <Button className="last-day" text="Last day" onClick={() => this.changeTimeRange('day')} />
+          <Button className="last-week" text="Last week" onClick={() => this.changeTimeRange('week')} />
+          <Button className="last-month" text="Last month" onClick={() => this.changeTimeRange('month')} />
         </div>
       </div>
     );
