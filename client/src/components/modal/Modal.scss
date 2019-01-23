@@ -1,0 +1,26 @@
+@import '../../App';
+
+.modal-bg{
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  z-index:9998;
+  background:$medGray;
+  opacity:0.8;
+}
+
+.modal-content{
+  background:$white;
+  border:1px solid $medGray;
+  position:fixed;
+  z-index:9999;
+  width:auto;
+  height:auto;
+  padding:2em;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

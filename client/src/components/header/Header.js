@@ -6,6 +6,7 @@ import { logoutUser } from '../../actions/authActions';
 import { clearCurrentProfile } from '../../actions/profileActions';
 import './Header.scss';
 import { Button } from '../button/Button';
+import { ReactComponent as Logo } from '../../images/sojourn-fare-logo.svg';
 
 class Header extends Component{
   onLogoutClick(e){
@@ -13,6 +14,7 @@ class Header extends Component{
     this.props.clearCurrentProfile();
     this.props.logoutUser();
   }
+
   render(){
     const { isAuthenticated, user } = this.props.auth;
 
@@ -41,7 +43,7 @@ class Header extends Component{
     return(
       <header className="main-header">
         <Link to="/">
-          <img src="/assets/images/sojourn-fare-logo.svg" alt="Sojourn Fare Logo" className="sojourn-fare-logo"/>
+          <Logo className="sojourn-fare-logo"/>
         </Link>
 
         <nav className="header-nav">

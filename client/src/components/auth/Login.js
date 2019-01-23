@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
 import TextFieldGroup from '../common/TextFieldGroup';
+import { Button } from '../button/Button';
+import { ReactComponent as Logo } from '../../images/sojourn-fare-logo.svg';
+import Modal from '../modal/Modal';
+
+import './Login.scss';
 
 class Login extends Component {
   constructor(){
@@ -10,8 +15,21 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      showModal: true
     };
+  }
+
+  openModalHandler = () => {
+    this.setState({
+      showModal: true
+    });
+  }
+
+  closeModalHandler = () => {
+    this.setState({
+      showModal: false
+    });
   }
 
   componentDidMount(){
@@ -49,27 +67,30 @@ class Login extends Component {
     const { errors } = this.state;
 
     return(
-      <div className="login">
-        <form onSubmit={this.onSubmit}>
-          <TextFieldGroup
-            placeholder="Email address"
-            name="email"
-            type="email"
-            value={this.state.email}
-            onChange={this.onChange}
-            error={errors.email}
-          />
-          <TextFieldGroup
-            placeholder="Password"
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.onChange}
-            error={errors.password}
-          />
-          <input type="submit" onSubmit={this.onSubmit} />
-        </form>
-      </div>
+      <Modal className="modal" show={ this.state.showModal }  close={ this.closeModalHandler }>
+        <div className="login-modal">
+          <Logo className="login-logo"/>
+          <form onSubmit={this.onSubmit} className="login-form">
+            <TextFieldGroup
+              placeholder="Email address"
+              name="email"
+              type="email"
+              value={this.state.email}
+              onChange={this.onChange}
+              error={errors.email}
+            />
+            <TextFieldGroup
+              placeholder="Password"
+              name="password"
+              type="password"
+              value={this.state.password}
+              onChange={this.onChange}
+              error={errors.password}
+            />
+          <Button text="Log in" style="medium" onSubmit={this.onSubmit} />
+          </form>
+        </div>
+      </Modal>
     )
   }
 }
