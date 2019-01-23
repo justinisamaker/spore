@@ -16,13 +16,13 @@ class Header extends Component{
   }
 
   render(){
-    const { isAuthenticated, user } = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
 
     const authLinks = (
       <ul>
         <li>
           <Link to='/' onClick={this.onLogoutClick.bind(this)}>
-            <Button text='Log Out' style='light'/>
+            <Button text='Log Out' color='light'/>
           </Link>
         </li>
       </ul>
@@ -31,11 +31,11 @@ class Header extends Component{
     const guestLinks = (
       <ul>
         <li>
-          <Link to="/register"><Button text='Register' style='light'/></Link>
+          <Link to="/register"><Button text='Register' color='light'/></Link>
         </li>
 
         <li>
-          <Link to="/login"><Button text='Login' style='light'/></Link>
+          <Link to="/login"><Button text='Login' color='light'/></Link>
         </li>
       </ul>
     );

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import './Button.scss';
 
@@ -7,13 +7,13 @@ export const Button = ({
   onClick,
   type,
   disabled,
-  style,
+  color,
   size
 }) => (
   <button
     type={type}
     disabled={disabled}
     onClick={onClick}
-    className={classNames('btn', style, size)}
+    className={classNames('btn', color, size)}
   >{text}</button>
 );

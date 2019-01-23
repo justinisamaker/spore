@@ -87,7 +87,7 @@ class Login extends Component {
               onChange={this.onChange}
               error={errors.password}
             />
-          <Button text="Log in" style="medium" onSubmit={this.onSubmit} />
+          <Button text="Log in" color="medium" onSubmit={this.onSubmit} />
           </form>
         </div>
       </Modal>
