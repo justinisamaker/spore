@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Header from './components/header/Header';
+import SystemOverview from './components/systemoverview/SystemOverview';
 import Login from './components/auth/Login';
 import CurrentReadingsContainer from './components/currentreadings/CurrentReadingsContainer';
 import LineChart from './components/linechart/LineChart';
@@ -41,6 +42,7 @@ class App extends Component {
         <BrowserRouter>
           <div className="App">
             <Header />
+            <SystemOverview />
             <Route exact path="/login" component={ Login } />
             <CurrentReadingsContainer />
             <LineChart />
