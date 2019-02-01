@@ -1,0 +1,21 @@
+@import '../../App';
+
+.login-modal{
+  width:20em;
+}
+
+.login-logo{
+  border-bottom:1px solid $lightGray;
+  padding-bottom:0.5em;
+  margin-bottom:1em;
+  margin-top:-0.5em;
+  fill: $darkGray !important;
+}
+
+.login-form{
+  input{
+    width:100%;
+    margin-bottom:0.5em;
+    padding:0.5em;
+  }
+}

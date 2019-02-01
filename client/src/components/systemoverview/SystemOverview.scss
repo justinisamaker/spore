@@ -1,0 +1,13 @@
+@import '../../App';
+
+.system-overview{
+  margin:2em 2em 0em 2em;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  column-gap: 2rem;
+}
+
+.system-overview-item{
+  border:1px solid $medGray;
+  padding:0.25em 1em;
+}

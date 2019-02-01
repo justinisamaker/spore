@@ -1,0 +1,18 @@
+@import '../../App';
+
+.change-setpoint{
+  display:grid;
+  grid-template-columns: 70% 30%;
+
+  p{
+    margin-top:0;
+  }
+}
+
+.setpoint-controls{
+  justify-self: end;
+  
+  button{
+    margin-right:0.5em;
+  }
+}

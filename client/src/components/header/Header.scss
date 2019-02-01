@@ -1,0 +1,38 @@
+@import '../../App';
+
+.main-header{
+  display:grid;
+  border-bottom:1px solid $medGray;
+  grid-template-columns: 1fr 85%;
+  grid-template-areas:
+    "logo links";
+}
+
+.sojourn-fare-logo{
+  grid-area: logo;
+  @include vertical-align();
+  margin-left:2em;
+
+  img{
+    width:100%;
+  }
+}
+
+.header-nav{
+  grid-area: links;
+  margin-right:2em;
+
+  ul{
+    list-style:none;
+    text-align:right;
+
+    li{
+      display:inline-block;
+      margin-right:0.5em;
+
+      &:last-child{
+        margin-right:none;
+      }
+    }
+  }
+}

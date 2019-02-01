@@ -1,0 +1,19 @@
+@import '../../App';
+
+.current-readings-container{
+  padding:2em;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap: 2rem;
+}
+
+.current-reading{
+  border:1px solid $medGray;
+  padding:0.7em 1em 1em 1em;
+}
+
+.current-reading-title{
+  margin:0 0 1em 0;
+  border-bottom:1px solid $lightGray;
+  padding-bottom:0.5em;
+}
