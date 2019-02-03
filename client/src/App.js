@@ -12,6 +12,7 @@ import SystemOverview from './components/systemoverview/SystemOverview';
 import Login from './components/auth/Login';
 import CurrentReadingsContainer from './components/currentreadings/CurrentReadingsContainer';
 import LineChart from './components/linechart/LineChart';
+import Footer from './components/footer/Footer';
 
 import './App.scss';
 
@@ -46,6 +47,7 @@ class App extends Component {
             <Route exact path="/login" component={ Login } />
             <CurrentReadingsContainer />
             <LineChart />
+            <Footer />
           </div>
         </BrowserRouter>
       </Provider>
