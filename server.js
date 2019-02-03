@@ -63,13 +63,17 @@ app.use('/api/lights', lights);
 global.globalHumidity = null;
 global.globalTemperature = null;
 global.globalCo2 = null;
-global.globalHumiditySetpoint = null;
 global.globalCo2Setpoint = null;
 global.saveCount = 0;
 global.lightsOnTime = 0;
 global.lightsOffTime = 0;
 
-let temperatureSetpoint = localStorage.getItem('tempSetpoint');
+// initialize localstorage vars
+let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
+let humiditySetpoint = parseInt(localStorage.getItem('humiditySetpoint'));
+
+if(temperatureSetpoint == null){ temperatureSetpoint = 70; };
+if(humiditySetpoint == null){ humiditySetpoint = 85; };
 
 // Set current time
 const currentHour = new Date().getHours();
@@ -121,25 +125,27 @@ if(process.env.HAS_DHT22 == 1){
       .then((res) => {
         let humidityRead = Math.round(res.data.humidityvalue);
         let temperatureRead = Math.round(res.data.temperaturevalue);
+        let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
+        let humiditySetpoint = parseInt(localStorage.getItem('humiditySetpoint'));
 
         if(process.env.HAS_HUMIDIFIER == 1){
-          if(humidityRead < global.globalHumiditySetpoint){
+          if(humidityRead < humiditySetpoint){
             axios.post(`${ip}/api/outlet/humidifier/0`)
               .then(
                 console.log(`Humidity low at ${humidityRead}%, turning humidifier on`)
               );
-          } else if(humidityRead > global.globalHumiditySetpoint){
+          } else if(humidityRead > humiditySetpoint){
             axios.post(`${ip}/api/outlet/humidifier/1`)
               .then(
                 console.log(`Humidity high at ${humidityRead}%, turning humidifier off`)
               );
-          } else if(humidityRead == global.globalHumiditySetpoint){
+          } else if(humidityRead == humiditySetpoint){
             axios.post(`${ip}/api/outlet/humidifier/1`)
               .then(
                 console.log(`Humidity stable at ${humidityRead}%, turning humidifier off`)
               );
           } else {
-            console.log(`Error in the humidity actions in server.js. Global humidity setpoint is ${global.globalHumiditySetpoint}%. Humidity read is ${humidityRead}%.`);
+            console.log(`Error in the humidity actions in server.js. Global humidity setpoint is ${humiditySetpoint}%. Humidity read is ${humidityRead}%.`);
           }
         }
 

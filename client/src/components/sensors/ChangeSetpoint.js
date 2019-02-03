@@ -19,7 +19,7 @@ class ChangeSetpoint extends Component {
     axios.get(`/api/${this.props.modifier}/setpoint`)
       .then(res => {
         this.setState({
-          setpoint: res.data[0].targetvalue
+          setpoint: res.data
         });
       });
   }

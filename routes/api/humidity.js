@@ -3,9 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-// Load humidity target model
-const HumidityTarget = require('../../models/HumidityTarget');
-
 // Load humidity reading model
 const Dht22Reading = require('../../models/Dht22Reading');
 
@@ -13,27 +10,16 @@ const Dht22Reading = require('../../models/Dht22Reading');
 // @desc    Change the humidity setpoint
 // @access  Private
 router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const newHumidity = new HumidityTarget({
-    targetvalue: req.params.targetvalue
-  });
-
-  global.globalHumiditySetpoint = req.params.targetvalue;
-
-  newHumidity
-    .save()
-    .then(humidity => res.json(humidity))
-    .catch(err => console.log(err));
+  localStorage.setItem('humiditySetpoint', parseInt(req.params.targetvalue));
+  res.json(parseInt(req.params.targetvalue));
 });
 
 // @route   GET /api/humidity/setpoint
 // @desc    Get the humidity setpoint
 // @access  Public
 router.get('/setpoint', (req, res) => {
-  HumidityTarget.find()
-    .sort({ date: -1 })
-    .limit(1)
-    .then(humidity => res.json(humidity))
-    .catch(err => res.status(404).json({ nohumiditysetpoint: 'No humidity setpoint found.'}));
+  let humidity = parseInt(localStorage.getItem('humiditySetpoint'));
+  res.json(humidity);
 });
 
 // @route   GET /api/humidity

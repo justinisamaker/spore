@@ -3,12 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-// localstorage
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  localStorage = new LocalStorage('./localdata');
-}
-
 // Load humidity reading model
 const Dht22Reading = require('../../models/Dht22Reading');
 
@@ -24,7 +18,7 @@ router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: fa
 // @desc    Get the temperature setpoint
 // @access  Public
 router.get('/setpoint', (req, res) => {
-  const temperature = localStorage.getItem('tempSetpoint');
+  let temperature = parseInt(localStorage.getItem('tempSetpoint'));
   res.json(temperature);
 });
 
