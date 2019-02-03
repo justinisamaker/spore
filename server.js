@@ -63,7 +63,6 @@ app.use('/api/lights', lights);
 global.globalHumidity = null;
 global.globalTemperature = null;
 global.globalCo2 = null;
-global.globalCo2Setpoint = null;
 global.saveCount = 0;
 global.lightsOnTime = 0;
 global.lightsOffTime = 0;
@@ -71,25 +70,16 @@ global.lightsOffTime = 0;
 // initialize localstorage vars
 let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
 let humiditySetpoint = parseInt(localStorage.getItem('humiditySetpoint'));
+let lightsOnTime = parseInt(localStorage.getItem('lightsOnTime'));
+let lightsOffTime = parseInt(localStorage.getItem('lightsOffTime'));
 
 if(temperatureSetpoint == null){ temperatureSetpoint = 70; };
 if(humiditySetpoint == null){ humiditySetpoint = 85; };
+if(lightsOnTime == null){ lightsOnTime = 6; };
+if(lightsOffTime == null){ lightsOffTime = 18; };
 
 // Set current time
 const currentHour = new Date().getHours();
-
-// Set global variables based on db variables on startup
-axios.get(`${ip}/api/humidity/setpoint`)
-  .then(res => {
-    global.globalHumiditySetpoint = (res.data[0].targetvalue);
-  })
-  .catch(err => console.log('Error getting startup global humidity: ' + err));
-
-axios.get(`${ip}/api/co2/setpoint`)
-  .then(res => {
-    global.globalCo2Setpoint = (res.data[0].targetvalue);
-  })
-  .catch(err => console.log('Error getting startup global Co2: ' + err));
 
 // Start server listening
 const port = process.env.PORT || 3001;
@@ -97,26 +87,6 @@ app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // Turn all pins off at startup
 axios.post(`${ip}/api/outlet/turnoffallpins/0`);
-
-// Get light times, and then check if the lights should be on
-axios.get(`${ip}/api/lights/on`)
-  .then(res => {
-    global.lightsOnTime = (res.data[0].targetvalue);
-  })
-  .catch(err => console.log('Error getting startup global lights on time: ' + err));
-
-axios.get(`${ip}/api/lights/off`)
-  .then(res => {
-    global.lightsOffTime = (res.data[0].targetvalue);
-
-    if(currentHour <= global.lightsOffTime && currentHour >= global.lightsOnTime){
-      console.log('turning lights on');
-      axios.post(`${ip}/api/outlet/lights/0`);
-    } else {
-      console.log(`${currentHour}: lights shouldnt be on : ${global.lightsOnTime} : ${global.lightsOffTime}`);
-    }
-  })
-  .catch(err => console.log('Error getting startup global lights of time: ' + err));
 
 // Scheduled check for humidity
 if(process.env.HAS_DHT22 == 1){
