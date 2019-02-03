@@ -3,8 +3,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-// Load temperature target model
-const TemperatureTarget = require('../../models/TemperatureTarget');
+// localstorage
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./localdata');
+}
 
 // Load humidity reading model
 const Dht22Reading = require('../../models/Dht22Reading');
@@ -13,27 +16,16 @@ const Dht22Reading = require('../../models/Dht22Reading');
 // @desc    Change the temperature setpoint
 // @access  Private
 router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const newTemperature = new TemperatureTarget({
-    targetvalue: parseInt(req.params.targetvalue)
-  });
-
-  global.globalTemperatureSetpoint = parseInt(req.params.targetvalue);
-
-  newTemperature
-    .save()
-    .then(temperature => res.json(temperature))
-    .catch(err => console.log(err));
+  localStorage.setItem('tempSetpoint', parseInt(req.params.targetvalue));
+  res.json(parseInt(req.params.targetvalue));
 });
 
 // @route   GET /api/temperature/setpoint
 // @desc    Get the temperature setpoint
 // @access  Public
 router.get('/setpoint', (req, res) => {
-  TemperatureTarget.find()
-    .sort({ date: -1 })
-    .limit(1)
-    .then(temperature => res.json(temperature))
-    .catch(err => res.status(404).json({ notemperaturesetpoint: 'No temperature setpoint found.'}));
+  const temperature = localStorage.getItem('tempSetpoint');
+  res.json(temperature);
 });
 
 // @route   GET /api/temperature

@@ -25,6 +25,12 @@ const app = express();
 
 const ip = 'http://127.0.0.1:3001';
 
+// localstorage
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./localdata');
+}
+
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -58,11 +64,12 @@ global.globalHumidity = null;
 global.globalTemperature = null;
 global.globalCo2 = null;
 global.globalHumiditySetpoint = null;
-global.globalTemperatureSetpoint = null;
 global.globalCo2Setpoint = null;
 global.saveCount = 0;
 global.lightsOnTime = 0;
 global.lightsOffTime = 0;
+
+let temperatureSetpoint = localStorage.getItem('tempSetpoint');
 
 // Set current time
 const currentHour = new Date().getHours();
@@ -73,12 +80,6 @@ axios.get(`${ip}/api/humidity/setpoint`)
     global.globalHumiditySetpoint = (res.data[0].targetvalue);
   })
   .catch(err => console.log('Error getting startup global humidity: ' + err));
-
-axios.get(`${ip}/api/temperature/setpoint`)
-  .then(res => {
-    global.globalTemperatureSetpoint = (res.data[0].targetvalue);
-  })
-  .catch(err => console.log('Error getting startup global temperature: ' + err));
 
 axios.get(`${ip}/api/co2/setpoint`)
   .then(res => {
@@ -143,23 +144,23 @@ if(process.env.HAS_DHT22 == 1){
         }
 
         if(process.env.HAS_HEATER == 1){
-          if(temperatureRead < global.globalTemperatureSetpoint){
+          if(temperatureRead < temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/0`)
               .then(
                 console.log(`Temperature low at ${temperatureRead}ºF, turning heater on`)
               );
-          } else if(temperatureRead > global.globalTemperatureSetpoint){
+          } else if(temperatureRead > temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/1`)
               .then(
                 console.log(`Temperature high at ${temperatureRead}ºF, turning heater off`)
               );
-          } else if(temperatureRead == global.globalTemperatureSetpoint){
+          } else if(temperatureRead == temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/1`)
               .then(
                 console.log(`Temperature stable at ${temperatureRead}ºF, turning heater off`)
               );
           } else {
-            console.log(`Error in the temperature actions in server.js. Global temperature setpoint is ${global.globalTemperatureSetpoint}ºF. Temperature read is ${temperatureRead}ºF.`);
+            console.log(`Error in the temperature actions in server.js. Global temperature setpoint is ${temperatureSetpoint}ºF. Temperature read is ${temperatureRead}ºF.`);
           }
         }
 
