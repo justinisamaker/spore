@@ -17,7 +17,7 @@ class LineChart extends Component{
   }
 
   componentDidMount(){
-    axios.get('/api/dht22/150')
+    axios.get('/api/dht22/50')
       .then(res => {
         this.setState({
           chartreadings: res.data
@@ -42,13 +42,14 @@ class LineChart extends Component{
 
     return(
       <div className="line-chart-container">
-        <ResponsiveContainer className="line-chart">
-          <AreaChart data={this.state.chartreadings}>
-            <XAxis dataKey="date" reversed={true} tickFormatter={dateFormat} interval={50}/>
-            <YAxis type="number" dataKey="humidityvalue"/>
+        <ResponsiveContainer className="line-chart-responsive">
+          <AreaChart data={this.state.chartreadings} className="line-chart" margin={{top: 30, right: 30, left: -15, bottom: 5}}>>
+            <XAxis dataKey="date" reversed={true} tickFormatter={dateFormat} />
+            <YAxis type="number" />
             <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
             <Tooltip />
-            <Area type="monotone" dataKey="humidityvalue" stroke="#3D99FE" />
+            <Area type="monotone" dataKey="temperaturevalue" fill="#fd8524" stroke="#fd8524" />
+            <Area type="monotone" dataKey="humidityvalue" fill="#3D99FE" stroke="#3D99FE"/>
           </AreaChart>
         </ResponsiveContainer>
         <div className="range-control">
