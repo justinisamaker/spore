@@ -64,8 +64,6 @@ global.globalHumidity = null;
 global.globalTemperature = null;
 global.globalCo2 = null;
 global.saveCount = 0;
-global.lightsOnTime = 0;
-global.lightsOffTime = 0;
 
 // initialize localstorage vars
 let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
