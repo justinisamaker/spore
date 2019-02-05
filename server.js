@@ -21,6 +21,7 @@ const dht22 = require('./routes/api/dht22');
 const relay = require('./routes/api/relay');
 const lights = require('./routes/api/lights');
 const fae = require('./routes/api/fae');
+const systemStatus = require('./routes/api/systemStatus');
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use('/api/dht22', dht22);
 app.use('/api/outlet', relay);
 app.use('/api/lights', lights);
 app.use('/api/fae', fae);
+app.use('/api/systemstatus', systemStatus);
 
 // Define global variables
 global.globalHumidity = null;
@@ -105,7 +107,7 @@ if(process.env.HAS_FAE == 1){
   cron.schedule(`*/${faeMinute} * * * *`, () => {
     global.faeOverride = true;
     axios.post(`${ip}/api/outlet/fae/0`)
-      .then( console.log(`Turning fans on for FAE. Occurs every ${faeSetpoint} rd/th minute.`));
+      .then( console.log(`Turning fans on for FAE. Occurs every ${faeMinute} minutes.`));
 
     setTimeout(() => {
       axios.post(`${ip}/api/outlet/humidifier/0`)
@@ -125,30 +127,30 @@ if(process.env.HAS_DHT22 == 1){
   cron.schedule('*/10 * * * * *', () => {
     axios.post(`${ip}/api/dht22`)
       .then((res) => {
-        let humidityRead = Math.round(res.data.humidityvalue);
-        let temperatureRead = Math.round(res.data.temperaturevalue);
+        global.globalHumidity = Math.round(res.data.humidityvalue);
+        global.globalTemperature = Math.round(res.data.temperaturevalue);
         let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
         let humiditySetpoint = parseInt(localStorage.getItem('humiditySetpoint'));
 
         if(process.env.HAS_HUMIDIFIER == 1){
           if(!faeOverride){
-            if(humidityRead < humiditySetpoint){
+            if(global.globalHumidity < humiditySetpoint){
               axios.post(`${ip}/api/outlet/fae/1`);
               axios.post(`${ip}/api/outlet/humidifier/0`)
                 .then(
-                  console.log(`Humidity low at ${humidityRead}%, turning humidifier on`)
+                  console.log(`Humidity low at ${global.globalHumidity}%, turning humidifier on`)
                 );
-            } else if(humidityRead > humiditySetpoint){
+            } else if(global.globalHumidity > humiditySetpoint){
               axios.post(`${ip}/api/outlet/fae/0`);
               axios.post(`${ip}/api/outlet/humidifier/1`)
                 .then(
-                  console.log(`Humidity high at ${humidityRead}%, turning humidifier off`)
+                  console.log(`Humidity high at ${global.globalHumidity}%, turning humidifier off`)
                 );
-            } else if(humidityRead == humiditySetpoint){
+            } else if(global.globalHumidity == humiditySetpoint){
               axios.post(`${ip}/api/outlet/fae/1`);
               axios.post(`${ip}/api/outlet/humidifier/1`)
                 .then(
-                  console.log(`Humidity stable at ${humidityRead}%, turning humidifier off`)
+                  console.log(`Humidity stable at ${global.globalHumidity}%, turning humidifier off`)
                 );
             } else {
               console.log(`Error in the humidity actions in server.js. Global humidity setpoint is ${humiditySetpoint}%. Humidity read is ${humidityRead}%.`);
@@ -157,20 +159,20 @@ if(process.env.HAS_DHT22 == 1){
         }
 
         if(process.env.HAS_HEATER == 1){
-          if(temperatureRead < temperatureSetpoint){
+          if(global.globalTemperature < temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/0`)
               .then(
-                console.log(`Temperature low at ${temperatureRead}ºF, turning heater on`)
+                console.log(`Temperature low at ${global.globalTemperature}ºF, turning heater on`)
               );
-          } else if(temperatureRead > temperatureSetpoint){
+          } else if(global.globalTemperature > temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/1`)
               .then(
-                console.log(`Temperature high at ${temperatureRead}ºF, turning heater off`)
+                console.log(`Temperature high at ${global.globalTemperature}ºF, turning heater off`)
               );
-          } else if(temperatureRead == temperatureSetpoint){
+          } else if(global.globalTemperature == temperatureSetpoint){
             axios.post(`${ip}/api/outlet/heater/1`)
               .then(
-                console.log(`Temperature stable at ${temperatureRead}ºF, turning heater off`)
+                console.log(`Temperature stable at ${global.globalTemperature}ºF, turning heater off`)
               );
           } else {
             console.log(`Error in the temperature actions in server.js. Global temperature setpoint is ${temperatureSetpoint}ºF. Temperature read is ${temperatureRead}ºF.`);
@@ -185,3 +187,11 @@ if(process.env.HAS_DHT22 == 1){
       });
   });
 }
+
+// System Status cron
+cron.schedule('1 * * * * *', () => {
+  axios.get(`${ip}/api/systemstatus`)
+    .then((res) => {
+      console.log(`Current system status is ${res.data}`);
+    });
+});
