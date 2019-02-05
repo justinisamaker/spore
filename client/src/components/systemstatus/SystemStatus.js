@@ -16,7 +16,7 @@ class SystemStatus extends Component {
   }
 
   componentDidMount(){
-    const statusInterval = setInterval(this.getSystemStatus, 60000);
+    const statusInterval = setInterval(this.getSystemStatus, 10000);
     this.setState({ intervalId: statusInterval });
   }
 
