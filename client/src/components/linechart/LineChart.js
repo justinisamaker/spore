@@ -43,9 +43,9 @@ class LineChart extends Component{
     return(
       <div className="line-chart-container">
         <ResponsiveContainer className="line-chart-responsive">
-          <AreaChart data={this.state.chartreadings} className="line-chart" margin={{top: 30, right: 30, left: -15, bottom: 5}}>>
+          <AreaChart data={this.state.chartreadings} className="line-chart" margin={{top: 30, right: 30, left: -15, bottom: 5}} >>
             <XAxis dataKey="date" reversed={true} tickFormatter={dateFormat} />
-            <YAxis type="number" />
+            <YAxis type="number" domain={[0, 100]}/>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
             <Tooltip />
             <Area type="monotone" dataKey="temperaturevalue" fill="#fd8524" stroke="#fd8524" />
