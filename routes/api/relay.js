@@ -39,7 +39,7 @@ router.post('/:target/:state', (req, res) => {
       process.env.HAS_CIRCULATION_FAN == 1 ? pins.circulationFanPin.writeSync(1) : console.log('circulation fan not enabled for turnoffallpins');
       process.env.HAS_HEATER == 1 ? pins.heaterPin.writeSync(1) : console.log('heater not enabled for turnoffallpins');
       process.env.HAS_CHILLER == 1 ? pins.chillerPin.writeSync(1) : console.log('chiller not enabled for turnoffallpins');
-      process.env.HAS_LIGHT == 1 ? pins.lightPin.writeSync(1) : console.log('light not enabled for turnoffallpins');
+     process.env.HAS_LIGHT == 1 ? pins.lightPin.writeSync(1) : console.log('light not enabled for turnoffallpins');
       process.env.HAS_WATER_LEVEL_PUMP == 1 ? pins.waterLevelPumpPin.writeSync(1) : console.log('water level pump not enabled for turnoffallpins');
       break;
     case 'turnonallpins':
@@ -48,7 +48,7 @@ router.post('/:target/:state', (req, res) => {
       process.env.HAS_CIRCULATION_FAN == 1 ? pins.circulationFanPin.writeSync(1) : console.log('circulation fan not enabled for turnoffallpins');
       process.env.HAS_HEATER == 1 ? pins.heaterPin.writeSync(0) : console.log('heater not enabled for turnoffallpins');
       process.env.HAS_CHILLER == 1 ? pins.chillerPin.writeSync(0) : console.log('chiller not enabled for turnoffallpins');
-      process.env.HAS_LIGHT == 1 ? pins.lightPin.writeSync(0) : console.log('light not enabled for turnoffallpins');
+     process.env.HAS_LIGHT == 1 ? pins.lightPin.writeSync(0) : console.log('light not enabled for turnoffallpins');
       process.env.HAS_WATER_LEVEL_PUMP == 1 ? pins.waterLevelPumpPin.writeSync(0) : console.log('water level pump not enabled for turnoffallpins');
       break;
     case 'humidifier':
