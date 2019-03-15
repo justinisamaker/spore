@@ -8,10 +8,6 @@ const passport = require('passport');
 const axios = require('axios');
 const cron = require('node-cron');
 
-// GPIO setup for debugging LED
-const Gpio = require('onoff').Gpio;
-const debugLed = new Gpio(26, 'out');
-
 // Require routes
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
@@ -63,6 +59,14 @@ app.use('/api/lights', lights);
 app.use('/api/fae', fae);
 app.use('/api/systemstatus', systemStatus);
 
+// Serve static assets if in prod
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('client/build'));
+  app.get('*', (req,res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 // Define global variables
 global.globalHumidity = null;
 global.globalTemperature = null;
@@ -79,54 +83,17 @@ let faeMinute = localStorage.getItem('faeSetpoint');
 let faeDuration = localStorage.getItem('faeDuration');
 let faeHumidityOffset = localStorage.getItem('faeHumidityOffset');
 
-if(isNaN(temperatureSetpoint) || !temperatureSetpoint){
-  localStorage.setItem('tempSetpoint', 60);
-  temperatureSetpoint = 60;
-} else {
-  console.log(`Temperature Setpoint: ${temperatureSetpoint}`);
-}
 
-if(isNaN(humiditySetpoint) || !humiditySetpoint){
-  localStorage.setItem('humiditySetpoint', 85);
-  humiditySetpoint = 85;
-} else {
-  console.log(`Humidity Setpoint: ${humiditySetpoint}`);
-}
+temperatureSetpoint = (temperatureSetpoint == null ? 70 : parseInt(temperatureSetpoint));
+humiditySetpoint = (humiditySetpoint == null ? 85 : parseInt(humiditySetpoint));
+lightsOnTime = (lightsOnTime == null ? 6 : parseInt(lightsOnTime));
+lightsOffTime = (lightsOffTime == null ? 18 : parseInt(lightsOffTime));
+faeMinute = (faeMinute == null ? 10 : parseInt(faeMinute));
+faeDuration = (faeDuration == null ? 90000 : parseInt(faeDuration));
+faeHumidityOffset = (faeHumidityOffset == null ? 60000 : parseInt(faeHumidityOffset));
 
-if(isNaN(lightsOnTime) || !lightsOnTime){
-  localStorage.setItem('lightsOnTime', 6);
-  lightsOnTime = 6;
-} else {
-  console.log(`Lights on time: ${lightsOnTime}`);
-}
-
-if(isNaN(lightsOffTime) || !lightsOffTime){
-  localStorage.setItem('lightsOffTime', 18);
-  lightsOffTime = 18;
-} else {
-  console.log(`Lights off time: ${lightsOffTime}`);
-}
-
-if(isNaN(faeMinute) || !faeMinute){
-  localStorage.setItem('faeSetpoint', 20);
-  faeMinute = 20;
-} else {
-  console.log(`FAE Minute: ${faeMinute}`);
-}
-
-if(isNaN(faeDuration) || !faeDuration){
-  localStorage.setItem('faeDuration', 90000);
-  faeDuration = 90000;
-} else {
-  console.log(`FAE Duration: ${faeDuration}`);
-}
-
-if(isNaN(faeHumidityOffset) || !faeHumidityOffset){
-  localStorage.setItem('faeHumidityOffset', 60000);
-  faeHumidityOffset = 60000;
-} else {
-  console.log(`FAE Humidity Offest: ${faeHumidityOffset}`);
-}
+// Set current time
+const currentHour = new Date().getHours();
 
 // Start server listening
 const port = process.env.PORT || 3001;
@@ -134,32 +101,6 @@ app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // Turn all pins off at startup
 axios.post(`${ip}/api/outlet/turnoffallpins/0`);
-
-// Set current time
-const currentHour = new Date().getHours();
-
-// Check if lights should be on
-if(process.env.HAS_LIGHT == 1){
-  if(currentHour <= lightsOffTime && currentHour >= lightsOnTime){
-    axios.post(`${ip}/api/outlet/lights/0`)
-      .then( console.log('Light should be on right now.') );
-  } else {
-    axios.post(`${ip}/api/outlet/lights/1`)
-      .then( console.log('Light should be off right now.') );
-  }
-
-  // lights cron
-  cron.schedule(`* ${lightsOnTime} * * *`, () => {
-    axios.post(`${ip}/api/outlet/lights/0`)
-      .then( console.log('Turning lights on for scheduled lightsOnTime.') );
-  });
-
-  cron.schedule(`* ${lightsOffTime} * * *`, () => {
-    axios.post(`${ip}/api/outlet/lights/1`)
-      .then( console.log('Turning lights of for scheduled lightsOffTime.') );
-  });
-}
-
 
 // FAE cron
 if(process.env.HAS_FAE == 1){
@@ -187,7 +128,7 @@ if(process.env.HAS_FAE == 1){
 
 // Scheduled check for humidity
 if(process.env.HAS_DHT22 == 1){
-  cron.schedule('*/20 * * * * *', () => {
+  cron.schedule('*/10 * * * * *', () => {
     axios.post(`${ip}/api/dht22`)
       .then((res) => {
         global.globalHumidity = Math.round(res.data.humidityvalue);
@@ -200,15 +141,9 @@ if(process.env.HAS_DHT22 == 1){
             if(global.globalHumidity < humiditySetpoint){
               axios.post(`${ip}/api/outlet/fae/1`);
               axios.post(`${ip}/api/outlet/humidifier/0`)
-                .then(() => {
-                  console.log(`Humidity low at ${global.globalHumidity}%, turning humidifier on`);
-                  setTimeout(() => {
-                    axios.post(`${ip}/api/outlet/humidifier/1`)
-                      .then(
-                        console.log('Turning humidifier off after 10 seconds')
-                      );
-                  }, 10000);
-                });
+                .then(
+                  console.log(`Humidity low at ${global.globalHumidity}%, turning humidifier on`)
+                );
             } else if(global.globalHumidity > humiditySetpoint){
               axios.post(`${ip}/api/outlet/fae/0`);
               axios.post(`${ip}/api/outlet/humidifier/1`)
