@@ -4,8 +4,9 @@ require('dotenv').load();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+let dht;
 if(process.env.NODE_ENV !== 'production'){
-  const dht = require('node-dht-sensor');
+  dht = require('node-dht-sensor');
 }
 const numeral = require('numeral');
 const moment = require('moment');
