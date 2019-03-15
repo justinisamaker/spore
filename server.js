@@ -21,7 +21,11 @@ const systemStatus = require('./routes/api/systemStatus');
 
 const app = express();
 
-const ip = 'http://localhost:3001';
+if(process.env.NODE_ENV === 'production'){
+  const ip = process.env.IP;
+} else {
+  const ip = 'http://localhost:3001';
+}
 
 // localstorage
 if (typeof localStorage === "undefined" || localStorage === null) {
