@@ -4,7 +4,9 @@ require('dotenv').load();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const dht = require('node-dht-sensor');
+if(process.env.NODE_ENV !== 'production'){
+  const dht = require('node-dht-sensor');
+}
 const numeral = require('numeral');
 const moment = require('moment');
 
@@ -15,24 +17,28 @@ const Dht22Reading = require('../../models/Dht22Reading');
 // @desc    Take a new relative humidity and temp reading from a DHT22
 // @access  Public
 router.post('/', (req, res) => {
-  dht.read(22, process.env.DHT_PIN, (err, temperature, humidity) => {
-    if(!err){
-      const newDht22 = new Dht22Reading({
-        temperaturevalue: numeral(((temperature * 9/5) + 32)).format('0.0'),
-        humidityvalue: numeral(humidity).format('0.0')
-      });
+  if(process.env.NODE_ENV !== 'production'){
+    dht.read(22, process.env.DHT_PIN, (err, temperature, humidity) => {
+      if(!err){
+        const newDht22 = new Dht22Reading({
+          temperaturevalue: numeral(((temperature * 9/5) + 32)).format('0.0'),
+          humidityvalue: numeral(humidity).format('0.0')
+        });
 
-      if(global.saveCount === 6){
-        newDht22
-          .save()
-          .then(reading => res.json(reading))
-          .then(console.log('saved a new humidity'))
-          .catch(err => console.log(err));
-      } else {
-        res.json(newDht22);
+        if(global.saveCount === 6){
+          newDht22
+            .save()
+            .then(reading => res.json(reading))
+            .then(console.log('saved a new humidity'))
+            .catch(err => console.log(err));
+        } else {
+          res.json(newDht22);
+        }
       }
-    }
-  });
+    });
+  } else {
+    res.json({ message: 'No sensor readings in prod.' });
+  }
 });
 
 // @route   GET /api/dht22
