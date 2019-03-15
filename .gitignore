@@ -22,8 +22,10 @@ node_modules/
 .env
 
 # Config files
-config/keys.js
 .remote-sync.json
 
 # Localstorage
 localdata/
+
+/config/keys_dev.js
+package-lock.json
