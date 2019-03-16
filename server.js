@@ -12,7 +12,7 @@ const cron = require('node-cron');
 const axiosConfig = {
   proxy:{
     host: '127.0.0.1',
-    port: 3001
+    port: process.env.PORT || 3001
   }
 };
 
@@ -77,7 +77,7 @@ app.use('/api/systemstatus', systemStatus);
 // Serve static assets if in prod
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static('client/build'));
-  
+
   app.get('*', (req,res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
