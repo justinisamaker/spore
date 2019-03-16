@@ -76,7 +76,11 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://127.0.0.1:3001",
+  "proxy": {
+    "/api": {
+      "target": "http://127.0.0.1:3001"
+    }
+  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
