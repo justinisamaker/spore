@@ -13,8 +13,6 @@ const axiosInstance = axios.create({
   baseURL: 'http://localhost:5000'
 });
 
-const axiosInstance = axios.create(axiosConfig);
-
 // Require routes
 const users = require('./routes/api/users');
 const humidity = require('./routes/api/humidity');
@@ -215,5 +213,5 @@ cron.schedule('1 * * * * *', () => {
 });
 
 // Start server listening
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
