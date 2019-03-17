@@ -8,13 +8,10 @@ const passport = require('passport');
 const axios = require('axios');
 const cron = require('node-cron');
 
-// Axios setup
-const axiosConfig = {
-  proxy:{
-    host: '127.0.0.1',
-    port: process.env.PORT || 3001
-  }
-};
+// Axios Config
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:5000'
+});
 
 const axiosInstance = axios.create(axiosConfig);
 
@@ -109,10 +106,6 @@ faeHumidityOffset = (faeHumidityOffset == null ? 60000 : parseInt(faeHumidityOff
 
 // Set current time
 const currentHour = new Date().getHours();
-
-// Start server listening
-const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // Turn all pins off at startup
 if(process.env.NODE_ENV !== 'production'){
@@ -220,3 +213,7 @@ cron.schedule('1 * * * * *', () => {
       console.log(`Current system status is ${res.data}`);
     });
 });
+
+// Start server listening
+const port = process.env.PORT || 3001;
+app.listen(port, () => console.log(`Server running on port ${port}`));
