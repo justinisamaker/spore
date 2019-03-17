@@ -14,6 +14,7 @@ class CurrentReading extends Component{
     const targetModifier = this.props.modifier.toLowerCase();
     axios.get(`https://builders-kit-0031.herokuapp.com/api/${targetModifier}`)
       .then(res => {
+        console.log(res.data);
         this.setState({
           readingvalue: res.data
         });
