@@ -19,6 +19,7 @@ class LineChart extends Component{
   componentDidMount(){
     axios.get('/api/dht22/50')
       .then(res => {
+        console.log(`Chart: ${res.data}`)
         this.setState({
           chartreadings: res.data
         });
