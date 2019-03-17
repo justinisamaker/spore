@@ -9,8 +9,9 @@ const axios = require('axios');
 const cron = require('node-cron');
 
 // Axios Config
+const baseURL = (!process.env.PORT ? 'http://localhost:5000' : `http://localhost:${process.env.PORT}`);
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:5000'
+  baseURL: baseURL
 });
 
 const app = express();
@@ -25,13 +26,6 @@ const relay = require('./routes/api/relay');
 const lights = require('./routes/api/lights');
 const fae = require('./routes/api/fae');
 const systemStatus = require('./routes/api/systemStatus');
-
-// let ip;
-// if(process.env.NODE_ENV === 'production'){
-//   ip = process.env.IP;
-// } else {
-//   ip = 'http://localhost:3001';
-// }
 
 // localstorage
 if (typeof localStorage === "undefined" || localStorage === null) {
