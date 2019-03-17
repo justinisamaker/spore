@@ -26,10 +26,8 @@ class LineChart extends Component{
   }
 
   changeTimeRange(range){
-    console.log('click');
     axios.get(`/api/dht22/last/${range}`)
       .then(res => {
-        console.log(`Chart: ${JSON.stringify(res.data)}`)
         this.setState({
           chartreadings: res.data
         });
