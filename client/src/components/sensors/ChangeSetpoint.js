@@ -19,6 +19,7 @@ class ChangeSetpoint extends Component {
     const targetModifier = this.props.modifier.toLowerCase();
     axios.get(`/api/${targetModifier}/setpoint`)
       .then(res => {
+        console.log(res.data);
         this.setState({
           setpoint: res.data
         });
