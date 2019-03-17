@@ -10,7 +10,7 @@ const cron = require('node-cron');
 const cors = require('cors');
 
 // Axios Config
-const baseURL = (!process.env.PORT ? 'http://localhost:5000' : `http://localhost:${process.env.PORT}`);
+const baseURL = (!process.env.PORT ? 'http://127.0.0.1:5000' : `http://127.0.0.1:${process.env.PORT}`);
 const axiosInstance = axios.create({
   baseURL: baseURL
 });
