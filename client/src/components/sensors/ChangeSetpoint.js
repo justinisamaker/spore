@@ -16,7 +16,8 @@ class ChangeSetpoint extends Component {
   }
 
   componentDidMount(){
-    axios.get(`/api/${this.props.modifier}/setpoint`)
+    const targetModifier = this.props.modifier.toLowerCase();
+    axios.get(`/api/${targetModifier}/setpoint`)
       .then(res => {
         this.setState({
           setpoint: res.data
@@ -25,8 +26,9 @@ class ChangeSetpoint extends Component {
   }
 
   componentDidUpdate(){
+    const targetModifier = this.props.modifier.toLowerCase();
     console.log(`Setting ${this.props.modifier} to ${this.state.setpoint}`);
-    axios.post(`/api/${this.props.modifier}/setpoint/${this.state.setpoint}`);
+    axios.post(`/api/${targetModifier}/setpoint/${this.state.setpoint}`);
   }
 
   changeSetpoint(direction){
