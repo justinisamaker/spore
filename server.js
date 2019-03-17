@@ -69,11 +69,7 @@ app.use('/api/systemstatus', systemStatus);
 
 // Serve static assets if in prod
 if(process.env.NODE_ENV === 'production'){
-  app.use(express.static('client/build') //path to your build directory
-  const path = require('path');
-  app.get('*', (req, res)=>{
-     res.sendFile(path.resolve(__dirname, 'build','public','index.html');
-}
+  app.use(express.static('client/build')); // serve the static react app
 }
 
 // Define global variables
