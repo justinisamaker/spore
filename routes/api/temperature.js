@@ -19,7 +19,11 @@ router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: fa
 // @access  Public
 router.get('/setpoint', (req, res) => {
   let temperature = parseInt(localStorage.getItem('tempSetpoint'));
-  res.json(temperature);
+  if(!temperature){
+    res.json(60);
+  } else {
+    res.json(temperature);
+  }
 });
 
 // @route   GET /api/temperature

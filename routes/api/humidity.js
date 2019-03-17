@@ -19,7 +19,11 @@ router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: fa
 // @access  Public
 router.get('/setpoint', (req, res) => {
   let humidity = parseInt(localStorage.getItem('humiditySetpoint'));
-  res.json(humidity);
+  if(!humidity){
+    res.json(80);
+  } else {
+    res.json(humidity);
+  }
 });
 
 // @route   GET /api/humidity
