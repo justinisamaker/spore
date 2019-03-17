@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const axios = require('axios');
 const cron = require('node-cron');
+const cors = require('cors');
 
 // Axios Config
 const baseURL = (!process.env.PORT ? 'http://localhost:5000' : `http://localhost:${process.env.PORT}`);
@@ -15,6 +16,9 @@ const axiosInstance = axios.create({
 });
 
 const app = express();
+
+// Set up CORS
+app.use(cors());
 
 // Require routes
 const users = require('./routes/api/users');
