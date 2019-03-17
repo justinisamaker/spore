@@ -17,7 +17,7 @@ class ChangeSetpoint extends Component {
 
   componentDidMount(){
     const targetModifier = this.props.modifier.toLowerCase();
-    axios.get(`https://builders-kit-0031.herokuapp.com//api/${targetModifier}/setpoint`)
+    axios.get(`https://builders-kit-0031.herokuapp.com/api/${targetModifier}/setpoint`)
       .then(res => {
         console.log(res.data);
         this.setState({
@@ -29,7 +29,7 @@ class ChangeSetpoint extends Component {
   componentDidUpdate(){
     const targetModifier = this.props.modifier.toLowerCase();
     console.log(`Setting ${this.props.modifier} to ${this.state.setpoint}`);
-    axios.post(`https://builders-kit-0031.herokuapp.com//api/${targetModifier}/setpoint/${this.state.setpoint}`);
+    axios.post(`https://builders-kit-0031.herokuapp.com/api/${targetModifier}/setpoint/${this.state.setpoint}`);
   }
 
   changeSetpoint(direction){
