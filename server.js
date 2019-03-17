@@ -10,8 +10,10 @@ const cron = require('node-cron');
 
 // Axios Config
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000'
+  baseURL: 'http://127.0.0.1:5000'
 });
+
+const app = express();
 
 // Require routes
 const users = require('./routes/api/users');
@@ -23,8 +25,6 @@ const relay = require('./routes/api/relay');
 const lights = require('./routes/api/lights');
 const fae = require('./routes/api/fae');
 const systemStatus = require('./routes/api/systemStatus');
-
-const app = express();
 
 // let ip;
 // if(process.env.NODE_ENV === 'production'){
