@@ -4,6 +4,11 @@
   padding:0.5em 0 0.6em 0;
   margin-top:3em;
   border-top:1px solid $medGray;
+  background:$white;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
 
   h6{
     text-size:0.8em;
