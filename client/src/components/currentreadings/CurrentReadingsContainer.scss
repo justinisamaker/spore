@@ -1,5 +1,6 @@
 @import '../../App';
 
+/*
 .current-readings-container{
   padding:2em;
   display:grid;
@@ -16,4 +17,12 @@
   margin:0 0 1em 0;
   border-bottom:1px solid $lightGray;
   padding-bottom:0.5em;
+}
+*/
+
+.current-readings-container{
+  padding:2em;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap: 2rem;
 }

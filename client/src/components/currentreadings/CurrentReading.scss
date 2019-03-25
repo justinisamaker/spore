@@ -1,0 +1,73 @@
+@import '../../App';
+
+.current-reading{
+  border:1px solid $medGray;
+  padding:0.7em 1em 1em 1em;
+
+  h4{
+    margin:0 0 0.5em 0;
+    border-bottom:1px solid $lightGray;
+    padding-bottom:0.5em;
+  }
+}
+
+.current-reading-value{
+  display:grid;
+  grid-template-columns:20% 4% 30% 26% 20%;
+  grid-template-rows:1fr;
+  grid-template-areas:
+    "inc spacer value setpoint dec";
+
+  border:1px solid $lightGray;
+  padding:1em;
+  margin-top:1em;
+  justify-items: center;
+  align-items: center;
+}
+
+.increment-button{
+  grid-area: inc;
+}
+
+.decrement-button{
+  grid-area: dec;
+}
+
+.reading-value{
+  // grid-gap:1em;
+  grid-area:value;
+  text-align:right;
+  justify-self:right;
+  border-right:1px solid $lightGray;
+  padding-right:1em;
+}
+
+.reading-setpoint{
+  grid-area:setpoint;
+  text-align:left;
+  justify-self:left;
+  padding-left:1em;
+}
+
+.value{
+  h5, h6{
+    line-height:1em;
+    margin:0;
+    padding:0;
+  }
+
+  h5{
+    font-size:2em;
+  }
+
+  h6{
+    font-size:1em;
+  }
+}
+
+.setpoint-button{
+  .btn{
+    width:4em;
+    height:4em;
+  }
+}

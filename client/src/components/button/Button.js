@@ -15,5 +15,5 @@ export const Button = ({
     disabled={disabled}
     onClick={onClick}
     className={classNames('btn', color, size)}
-  >{text}</button>
+  ><span>{text}</span></button>
 );
