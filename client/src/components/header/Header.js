@@ -30,9 +30,11 @@ class Header extends Component{
 
     const guestLinks = (
       <ul>
+        {/*
         <li>
           <Link to="/register"><Button text='Register' color='light'/></Link>
         </li>
+        */}
 
         <li>
           <Link to="/login"><Button text='Login' color='light'/></Link>

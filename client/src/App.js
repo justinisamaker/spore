@@ -43,7 +43,7 @@ class App extends Component {
         <BrowserRouter>
           <div className="App">
             <Header />
-            <SystemOverview />
+            {/* <SystemOverview /> */}
             <Route exact path="/login" component={ Login } />
             <CurrentReadingsContainer />
             <LineChart />
