@@ -34,7 +34,6 @@ class CurrentReading extends Component{
 
   componentDidUpdate(){
     console.log(`Setting ${this.props.modifier} to ${this.state.setpoint}`);
-    axios.post(`/api/${this.props.modifier}/setpoint/${this.state.setpoint}`);
   }
 
   changeSetpoint(direction){
@@ -47,6 +46,8 @@ class CurrentReading extends Component{
         setpoint: this.state.setpoint + 1
       });
     }
+
+    axios.post(`/api/${this.props.modifier}/setpoint/${this.state.setpoint}`);
   }
 
   render(){

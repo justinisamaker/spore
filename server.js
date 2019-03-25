@@ -83,17 +83,12 @@ global.saveCount = 0;
 global.faeOverride = false;
 
 // initialize localstorage vars
-let temperatureSetpoint = localStorage.getItem('tempSetpoint');
-let humiditySetpoint = localStorage.getItem('humiditySetpoint');
 let lightsOnTime = localStorage.getItem('lightsOnTime');
 let lightsOffTime = localStorage.getItem('lightsOffTime');
 let faeMinute = localStorage.getItem('faeSetpoint');
 let faeDuration = localStorage.getItem('faeDuration');
 let faeHumidityOffset = localStorage.getItem('faeHumidityOffset');
 
-
-temperatureSetpoint = (temperatureSetpoint == null ? 70 : parseInt(temperatureSetpoint));
-humiditySetpoint = (humiditySetpoint == null ? 85 : parseInt(humiditySetpoint));
 lightsOnTime = (lightsOnTime == null ? 6 : parseInt(lightsOnTime));
 lightsOffTime = (lightsOffTime == null ? 18 : parseInt(lightsOffTime));
 faeMinute = (faeMinute == null ? 10 : parseInt(faeMinute));
@@ -142,55 +137,67 @@ if(process.env.NODE_ENV !== 'production'){
         .then((res) => {
           global.globalHumidity = Math.round(res.data.humidityvalue);
           global.globalTemperature = Math.round(res.data.temperaturevalue);
-          let temperatureSetpoint = parseInt(localStorage.getItem('tempSetpoint'));
-          let humiditySetpoint = parseInt(localStorage.getItem('humiditySetpoint'));
+          let temperatureSetpoint;
+          let humiditySetpoint;
 
-          if(process.env.HAS_HUMIDIFIER == 1){
-            if(!faeOverride){
-              if(global.globalHumidity < humiditySetpoint){
-                axiosInstance.post(`/api/outlet/fae/1`);
-                axiosInstance.post(`/api/outlet/humidifier/0`)
-                  .then(
-                    console.log(`Humidity low at ${global.globalHumidity}%, turning humidifier on`)
-                  );
-              } else if(global.globalHumidity > humiditySetpoint){
-                axiosInstance.post(`/api/outlet/fae/0`);
-                axiosInstance.post(`/api/outlet/humidifier/1`)
-                  .then(
-                    console.log(`Humidity high at ${global.globalHumidity}%, turning humidifier off`)
-                  );
-              } else if(global.globalHumidity == humiditySetpoint){
-                axiosInstance.post(`/api/outlet/fae/1`);
-                axiosInstance.post(`/api/outlet/humidifier/1`)
-                  .then(
-                    console.log(`Humidity stable at ${global.globalHumidity}%, turning humidifier off`)
-                  );
-              } else {
-                console.log(`Error in the humidity actions in server.js. Global humidity setpoint is ${humiditySetpoint}%. Humidity read is ${humidityRead}%.`);
-              }
-            }
-          }
+          axiosInstance.get(`/api/temperature/setpoint`)
+            .then((res) => {
+              temperatureSetpoint = res.data;
 
-          if(process.env.HAS_HEATER == 1){
-            if(global.globalTemperature < temperatureSetpoint){
-              axiosInstance.post(`/api/outlet/heater/0`)
-                .then(
-                  console.log(`Temperature low at ${global.globalTemperature}ºF, turning heater on`)
-                );
-            } else if(global.globalTemperature > temperatureSetpoint){
-              axiosInstance.post(`/api/outlet/heater/1`)
-                .then(
-                  console.log(`Temperature high at ${global.globalTemperature}ºF, turning heater off`)
-                );
-            } else if(global.globalTemperature == temperatureSetpoint){
-              axiosInstance.post(`/api/outlet/heater/1`)
-                .then(
-                  console.log(`Temperature stable at ${global.globalTemperature}ºF, turning heater off`)
-                );
-            } else {
-              console.log(`Error in the temperature actions in server.js. Global temperature setpoint is ${temperatureSetpoint}ºF. Temperature read is ${temperatureRead}ºF.`);
-            }
-          }
+              axiosInstance.get(`/api/humidity/setpoint`)
+                .then((res) => {
+                  humiditySetpoint = res.data;
+
+                  if(process.env.HAS_HUMIDIFIER == 1){
+                    if(!faeOverride){
+                      if(global.globalHumidity < humiditySetpoint){
+                        axiosInstance.post(`/api/outlet/fae/1`);
+                        axiosInstance.post(`/api/outlet/humidifier/0`)
+                          .then(
+                            console.log(`Humidity low at ${global.globalHumidity}%, turning humidifier on`)
+                          );
+                      } else if(global.globalHumidity > humiditySetpoint){
+                        axiosInstance.post(`/api/outlet/fae/0`);
+                        axiosInstance.post(`/api/outlet/humidifier/1`)
+                          .then(
+                            console.log(`Humidity high at ${global.globalHumidity}%, turning humidifier off`)
+                          );
+                      } else if(global.globalHumidity == humiditySetpoint){
+                        axiosInstance.post(`/api/outlet/fae/1`);
+                        axiosInstance.post(`/api/outlet/humidifier/1`)
+                          .then(
+                            console.log(`Humidity stable at ${global.globalHumidity}%, turning humidifier off`)
+                          );
+                      } else {
+                        console.log(`Error in the humidity actions in server.js. Global humidity setpoint is ${humiditySetpoint}%.`);
+                      }
+                    }
+                  }
+
+                  if(process.env.HAS_HEATER == 1){
+                    if(global.globalTemperature < temperatureSetpoint){
+                      axiosInstance.post(`/api/outlet/heater/0`)
+                        .then(
+                          console.log(`Temperature low at ${global.globalTemperature}ºF, turning heater on`)
+                        );
+                    } else if(global.globalTemperature > temperatureSetpoint){
+                      axiosInstance.post(`/api/outlet/heater/1`)
+                        .then(
+                          console.log(`Temperature high at ${global.globalTemperature}ºF, turning heater off`)
+                        );
+                    } else if(global.globalTemperature == temperatureSetpoint){
+                      axiosInstance.post(`/api/outlet/heater/1`)
+                        .then(
+                          console.log(`Temperature stable at ${global.globalTemperature}ºF, turning heater off`)
+                        );
+                    } else {
+                      console.log(`Error in the temperature actions in server.js. Global temperature setpoint is ${temperatureSetpoint}ºF.`);
+                    }
+                  }
+                }); // end humidity setpoint response
+            }); // end temp setpoint response
+
+
 
           if(global.saveCount !== 6){
             global.saveCount++;
