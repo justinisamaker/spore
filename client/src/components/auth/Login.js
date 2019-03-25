@@ -13,7 +13,7 @@ class Login extends Component {
   constructor(){
     super();
     this.state = {
-      email: '',
+      username: '',
       password: '',
       errors: {},
       showModal: true
@@ -34,13 +34,13 @@ class Login extends Component {
 
   componentDidMount(){
     if(this.props.auth.isAuthenticated){
-      this.props.history.push('/dashboard');
+      this.props.history.push('/');
     }
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.auth.isAuthenticated){
-      this.props.history.push('/dashboard');
+      this.props.history.push('/');
     }
 
     if(nextProps.errors){
@@ -56,7 +56,7 @@ class Login extends Component {
     e.preventDefault();
 
     const userData = {
-      email: this.state.email,
+      username: this.state.username,
       password: this.state.password
     };
 
@@ -72,10 +72,10 @@ class Login extends Component {
           <Logo className="login-logo"/>
           <form onSubmit={this.onSubmit} className="login-form">
             <TextFieldGroup
-              placeholder="Email address"
-              name="email"
-              type="email"
-              value={this.state.email}
+              placeholder="Username"
+              name="username"
+              type="text"
+              value={this.state.username}
               onChange={this.onChange}
               error={errors.email}
             />

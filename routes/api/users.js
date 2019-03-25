@@ -62,14 +62,14 @@ router.post('/login', (req, res) => {
     return res.status(400).json(errors);
   }
 
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  // Find user by email
-  User.findOne({ email })
+  // Find user by username
+  User.findOne({ username })
     .then(user => {
       // Check if user actually exists
       if(!user){
-        errors.email = 'User not found.';
+        errors.username = 'User not found.';
         return res.status(404).json(errors);
       }
 
