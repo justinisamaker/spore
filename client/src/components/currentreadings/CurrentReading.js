@@ -41,14 +41,14 @@ class CurrentReading extends Component{
   changeSetpoint(direction){
     if(direction === 'decrement'){
       this.setState({
-        setpoint: this.state.setpoint - 1
+        setpoint: this.state.setpoint-=1
       });
     } else {
       this.setState({
-        setpoint: this.state.setpoint + 1
+        setpoint: this.state.setpoint+=1
       });
     }
-
+    
     axios.post(`/api/${this.props.modifier}/setpoint/${this.state.setpoint}`);
   }
 
