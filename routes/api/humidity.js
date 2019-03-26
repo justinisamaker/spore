@@ -13,13 +13,12 @@ const HumiditySetpoint = require('../../models/HumiditySetpoint');
 // @access  Private
 router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
   localStorage.setItem('humiditySetpoint', parseInt(req.params.targetvalue));
-  const newHumiditySetpoint = new HumiditySetpoint({
-    humiditysetpointvalue: req.params.targetvalue
-  });
 
-  newHumiditySetpoint
-    .save()
-    .then(res.json(parseInt(req.params.targetvalue)));
+  HumiditySetpoint.findOneAndUpdate(
+    { },
+    {"$set": { humiditysetpointvalue: req.params.targetvalue }},
+    {"new": true}
+  ).then(res.json(parseInt(req.params.targetvalue)));
 });
 
 // @route   GET /api/humidity/setpoint

@@ -12,13 +12,11 @@ const TemperatureSetpoint = require('../../models/TemperatureSetpoint');
 // @access  Private
 router.post('/setpoint/:targetvalue', passport.authenticate('jwt', { session: false }), (req, res) => {
   localStorage.setItem('tempSetpoint', parseInt(req.params.targetvalue));
-  const newTemperatureSetpoint = new TemperatureSetpoint({
-    temperaturesetpointvalue: req.params.targetvalue
-  });
-
-  newTemperatureSetpoint
-    .save()
-    .then(res.json(parseInt(req.params.targetvalue)));
+  TemperatureSetpoint.findOneAndUpdate(
+    { },
+    {"$set": { temperaturesetpointvalue: req.params.targetvalue }},
+    {"new": true}
+  ).then(res.json(parseInt(req.params.targetvalue)));
 });
 
 // @route   GET /api/temperature/setpoint
