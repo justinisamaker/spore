@@ -1,4 +1,4 @@
 # spore
 An application for interacting with environmental control units from Sojourn Fare
 
-Testing CI.
+Another CI test.
