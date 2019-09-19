@@ -45,7 +45,7 @@ class Header extends Component{
     return(
       <header className="main-header">
         <Link to="/">
-          <Logo className="sojourn-fare-logo"/>
+          <h1>Solar Mushroom Kit</h1>
         </Link>
 
         <nav className="header-nav">

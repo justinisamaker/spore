@@ -3,10 +3,17 @@
 .main-header{
   display:grid;
   border-bottom:1px solid $medGray;
-  grid-template-columns: 1fr 85%;
+  grid-template-columns: 1fr 65%;
+  padding-left:2em;
   grid-template-areas:
     "logo links";
+
+  h1{
+    grid-area: logo;
+  }
 }
+
+
 
 .sojourn-fare-logo{
   grid-area: logo;
