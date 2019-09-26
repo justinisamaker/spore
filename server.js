@@ -106,21 +106,21 @@ if(process.env.NODE_ENV !== 'production'){
 // Check if lights should be on
 if(process.env.HAS_LIGHT == 1 && process.env.NODE_ENV !== 'production'){
   if(currentHour <= lightsOffTime && currentHour >= lightsOnTime){
-    axiosInstance.post(`/api/outlet/lights/1`)
+    axiosInstance.post(`/api/outlet/lights/0`)
       .then( console.log('Light should be on right now.') );
   } else {
-    axiosInstance.post(`/api/outlet/lights/0`)
+    axiosInstance.post(`/api/outlet/lights/1`)
       .then( console.log('Light should be off right now.') );
   }
 
   // lights cron
   cron.schedule(`* ${lightsOnTime} * * *`, () => {
-    axiosInstance.post(`/api/outlet/lights/1`)
+    axiosInstance.post(`/api/outlet/lights/0`)
       .then( console.log('Turning lights on for scheduled lightsOnTime.') );
   });
 
   cron.schedule(`* ${lightsOffTime} * * *`, () => {
-    axiosInstance.post(`/api/outlet/lights/0`)
+    axiosInstance.post(`/api/outlet/lights/1`)
       .then( console.log('Turning lights of for scheduled lightsOffTime.') );
   });
 }
